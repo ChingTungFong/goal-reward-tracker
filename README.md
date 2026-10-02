@@ -2,8 +2,11 @@
 
 A reward-based habit tracker: set goals, check in, and earn treats — with a monthly cap per treat so rewards stay meaningful.
 
-![Screenshot](screenshot.png)
-
+<p>
+  <img src="screenshot-today.png" width="250">
+  <img src="screenshot-calendar.png" width="250">
+  <img src="screenshot-card.png" width="250">
+</p>
 ## Features
 
 - **Weekly, monthly and yearly goals** — each with its own target, emoji and start date. Goals can be archived and restored.
