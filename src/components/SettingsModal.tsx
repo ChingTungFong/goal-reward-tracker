@@ -29,6 +29,7 @@ export const SettingsModal: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importStatus, setImportStatus] = useState<string | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [pendingImport, setPendingImport] = useState<{ content: string; filename: string } | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
   if (!isSettingsOpen) return null;
@@ -57,23 +58,36 @@ export const SettingsModal: React.FC = () => {
     const reader = new FileReader();
     reader.onload = (event) => {
       const content = event.target?.result as string;
-      const success = importDataJSON(content);
-      if (success) {
-        setImportStatus('success');
-        showTemporaryNotice(lang === 'zh' ? '資料已成功匯入！' : 'Data imported successfully!');
-      } else {
-        setImportStatus('error');
-        showTemporaryNotice(
-          lang === 'zh'
-            ? '匯入失敗：檔案格式不正確'
-            : 'Import failed: invalid JSON format'
-        );
-      }
+      setPendingImport({
+        content,
+        filename: file.name,
+      });
     };
     reader.readAsText(file);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
+  };
+
+  const handleConfirmImport = () => {
+    if (!pendingImport) return;
+    const success = importDataJSON(pendingImport.content);
+    if (success) {
+      setImportStatus('success');
+      showTemporaryNotice(lang === 'zh' ? '資料已成功匯入！' : 'Data imported successfully!');
+    } else {
+      setImportStatus('error');
+      showTemporaryNotice(
+        lang === 'zh'
+          ? '匯入失敗：檔案格式不正確'
+          : 'Import failed: invalid JSON format'
+      );
+    }
+    setPendingImport(null);
+  };
+
+  const handleCancelImport = () => {
+    setPendingImport(null);
   };
 
   const handleLoadDemo = () => {
@@ -183,6 +197,7 @@ export const SettingsModal: React.FC = () => {
               </button>
 
               {/* Import Button */}
+              {/* Import Button & Confirmation */}
               <input
                 ref={fileInputRef}
                 type="file"
@@ -190,13 +205,41 @@ export const SettingsModal: React.FC = () => {
                 onChange={handleImportFile}
                 className="hidden"
               />
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="w-full min-h-[44px] py-2 px-3 bg-white text-stone-700 text-xs font-semibold rounded-xl border border-stone-200 hover:bg-stone-50 transition-colors flex items-center justify-center gap-2"
-              >
-                <Upload className="w-4 h-4 text-stone-500" />
-                <span>{lang === 'zh' ? '匯入資料 (選擇 JSON 檔案)' : 'Import Data (JSON file)'}</span>
-              </button>
+              {pendingImport ? (
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-2xl space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-rose-700">
+                    <AlertTriangle className="w-4 h-4" />
+                    <span>{lang === 'zh' ? '確定匯入備份資料？' : 'Import backup data?'}</span>
+                  </div>
+                  <p className="text-[11px] text-rose-600 leading-normal">
+                    {lang === 'zh'
+                      ? `此操作無法還原，匯入將會取代現有的所有目標、獎賞、打卡及獎牌紀錄（檔案：${pendingImport.filename}）。`
+                      : `This action cannot be undone. Importing "${pendingImport.filename}" will replace all your current goals, treats, check-ins, and trophies.`}
+                  </p>
+                  <div className="flex items-center gap-2 pt-1">
+                    <button
+                      onClick={handleConfirmImport}
+                      className="flex-1 min-h-[36px] bg-rose-600 text-white text-xs font-semibold rounded-lg hover:bg-rose-700 transition-colors"
+                    >
+                      {lang === 'zh' ? '確認覆蓋匯入' : 'Yes, Import & Replace'}
+                    </button>
+                    <button
+                      onClick={handleCancelImport}
+                      className="flex-1 min-h-[36px] bg-white text-stone-600 text-xs font-medium rounded-lg border border-stone-200 hover:bg-stone-50 transition-colors"
+                    >
+                      {lang === 'zh' ? '取消' : 'Cancel'}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full min-h-[44px] py-2 px-3 bg-white text-stone-700 text-xs font-semibold rounded-xl border border-stone-200 hover:bg-stone-50 transition-colors flex items-center justify-center gap-2"
+                >
+                  <Upload className="w-4 h-4 text-stone-500" />
+                  <span>{lang === 'zh' ? '匯入資料 (選擇 JSON 檔案)' : 'Import Data (JSON file)'}</span>
+                </button>
+              )}
 
               {/* Load Demo Data */}
               <button
