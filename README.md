@@ -6,6 +6,7 @@ A reward-based habit tracker: set goals, check in, and earn treats — with a mo
   <img src="screenshot-today.png" width="250">
   <img src="screenshot-calendar.png" width="250">
   <img src="screenshot-card.png" width="250">
+  <img src="screenshot-goal setting.png" width="250">
 </p>
 ## Features
 
