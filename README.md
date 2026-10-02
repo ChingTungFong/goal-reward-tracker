@@ -1,73 +1,76 @@
-# Treat Tracker
+# Earn Your Treat 🍰
 
-A reward-based habit tracker where completing goals earns treats, with a monthly treat cap.
+A reward-based habit tracker: set goals, check in, and earn treats — with a monthly cap per treat so rewards stay meaningful.
 
 ![Screenshot](screenshot.png)
 
 ## Features
 
-- **Habit Goals**: Create and track daily, weekly, or monthly goals with customizable targets and emojis.
-- **Treat Rewards**: Link goals to treat rewards with customizable exchange rules (e.g. 3 check-ins = 1 treat).
-- **Monthly Treat Cap**: Set healthy monthly allowances per treat to celebrate milestones responsibly and avoid over-indulgence.
-- **Interactive Calendar with Backfill**: View your complete check-in and redemption history by day, with support for logging recent past activities.
-- **Trophy Shelf & Milestones**: Earn badges and celebratory confetti when reaching habit streaks and redeem milestones.
-- **Downloadable Summary Card**: Export and save a visual summary card of your progress as an image.
-- **Bilingual Interface & Data Portability**: Toggle between English and Traditional Chinese (繁體中文), with JSON backup export and import.
-
-## Tech Stack
-
-Built with [Google AI Studio](https://aistudio.google.com/):
-
-- **Core**: React 19, TypeScript
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS v4
-- **Icons**: Lucide React
-- **Animation & Visuals**: Motion, Canvas Confetti
-- **Image Generation**: html-to-image
+- **Weekly, monthly and yearly goals** — each with its own target, emoji and start date. Goals can be archived and restored.
+- **Reward rules** — link a goal to a treat with your own exchange rate (e.g. 3 check-ins = 1 treat).
+- **Monthly treat cap** — set a monthly allowance for each treat. Treats redeemed beyond your balance or cap are logged honestly as "extra" rather than blocked.
+- **Calendar with backfill** — review check-ins and redemptions by day, and backfill missed check-ins from the past 7 days. Backfilled entries are marked separately from same-day check-ins.
+- **Milestones and trophy shelf** — progress milestones (25%, 50%, 75%) and goal completions trigger a celebration and are collected on a trophy shelf.
+- **Shareable cards** — download achievement cards and a weekly recap as images.
+- **Bilingual interface** — switch between English and Traditional Chinese (繁體中文).
+- **Data backup** — export all data to a JSON file and import it on another device or browser.
+- **Demo mode** — first-time users can load two months of sample data to explore the app.
 
 ## Privacy
 
-All data is stored locally in the browser's `localStorage`. The application runs entirely client-side with no accounts, no backend servers, and no API keys required.
+Everything stays on your device. All data is stored in the browser's `localStorage`: no accounts, no backend server, no analytics and no API keys. The app makes no network requests apart from loading web fonts.
 
-## Run Locally
+## Tech stack
 
-### Prerequisites
+- React 19 and TypeScript
+- Vite
+- Tailwind CSS v4
+- Motion (animations), canvas-confetti, Lucide icons
+- html-to-image (card downloads)
 
-- Node.js (v18 or higher recommended)
-- npm
+Designed and iterated with [Google AI Studio](https://aistudio.google.com/).
 
-### Installation
+## Run locally
 
-1. Clone or download the repository.
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+Requires Node.js 18 or later.
 
-### Development
-
-Start the local development server:
 ```bash
+npm install
 npm run dev
 ```
 
-### Build
+Then open http://localhost:3000.
 
-Create an optimized production build:
+To create a production build:
+
 ```bash
 npm run build
-```
-
-Preview the production build locally:
-```bash
 npm run preview
 ```
 
-## Possible Extensions
+## Project structure
 
-- **Cloud Sync**: All storage operations are centralized in `src/utils/storage.ts`, making it straightforward to replace the local storage provider with a backend database like Firebase or Supabase for cross-device synchronization.
-- **AI Features**: Personalized encouragement messages, celebratory quotes, or habit insights via the Gemini API. For security, API calls should be routed through a server-side function rather than called directly from the browser, ensuring the API key is never exposed.
+```
+src/
+├── components/   Modals, cards and navigation
+├── context/      App state and business logic (AppContext)
+├── types/        TypeScript data models
+├── utils/        Storage, date helpers, presets, templates, demo data
+└── views/        Today, Goals, Treats and Calendar screens
+```
+
+## Possible extensions
+
+This version is intentionally local-only. All storage operations live in a single module, `src/utils/storage.ts`, so the app can be extended without touching the screens:
+
+- **Cloud sync** — replace the storage module with a backend such as Firebase or Supabase to sync across devices.
+- **AI features** — for example, personalised encouragement messages via the Gemini API. API calls should go through a server-side function rather than the browser, so the API key is never exposed to users.
 
 ## My role
 
-[To be written by the author]
+<!-- TODO: replace the bullets below with your own experience before publishing -->
+
+- [Product definition: the problem you wanted to solve and the requirements you set]
+- [UX/UI decisions you made, and why]
+- [Testing: what you checked, and any issues you found and fixed]
+- [Security and code clean-up: removing unused AI and server dependencies, checking for exposed API keys]
