@@ -214,8 +214,8 @@ export const SettingsModal: React.FC = () => {
             <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
             <p className="text-[11px] text-stone-600 leading-relaxed">
               {lang === 'zh'
-                ? '溫馨提示：你的所有資料均只儲存於此裝置的瀏覽器本地 (localStorage)，無需登入，亦絕不連繫任何伺服器或外部 API。'
-                : 'Notice: All your data is stored locally in this browser (localStorage). No login, no server, and no external APIs.'}
+                ? '溫馨提示：你的所有資料均只儲存於此裝置的瀏覽器本地，無需登入，亦絕不連繫任何伺服器或外部 API。'
+                : 'Notice: All your data is stored locally in this browser. No login, no server, and no external APIs.'}
             </p>
           </div>
 

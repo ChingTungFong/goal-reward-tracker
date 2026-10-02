@@ -21,6 +21,7 @@ import {
 } from '../utils/dateUtils';
 import { getRandomTemplate } from '../utils/templates';
 import { generateDemoData } from '../utils/demoData';
+import { storage } from '../utils/storage';
 
 interface AppContextType {
   lang: Language;
@@ -88,48 +89,33 @@ interface AppContextType {
   importDataJSON: (jsonStr: string) => boolean;
 }
 
-const STORAGE_KEYS = {
-  LANG: 'eyt_lang',
-  GOALS: 'eyt_goals',
-  TREATS: 'eyt_treats',
-  CHECKINS: 'eyt_checkins',
-  REDEMPTIONS: 'eyt_redemptions',
-  ACHIEVEMENTS: 'eyt_achievements',
-  ONBOARDING_SEEN: 'eyt_onboarding_seen',
-};
-
 const AppContext = createContext<AppContextType | null>(null);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [lang, setLangState] = useState<Language>(() => {
-    return (localStorage.getItem(STORAGE_KEYS.LANG) as Language) || 'en';
+    return storage.getLang();
   });
 
   const [activeTab, setActiveTab] = useState<'today' | 'calendar' | 'treats' | 'goals'>('today');
 
   const [goals, setGoals] = useState<Goal[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.GOALS);
-    return saved ? JSON.parse(saved) : [];
+    return storage.getGoals();
   });
 
   const [treats, setTreats] = useState<Treat[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.TREATS);
-    return saved ? JSON.parse(saved) : [];
+    return storage.getTreats();
   });
 
   const [checkIns, setCheckIns] = useState<CheckIn[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.CHECKINS);
-    return saved ? JSON.parse(saved) : [];
+    return storage.getCheckIns();
   });
 
   const [redemptions, setRedemptions] = useState<Redemption[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.REDEMPTIONS);
-    return saved ? JSON.parse(saved) : [];
+    return storage.getRedemptions();
   });
 
   const [achievements, setAchievements] = useState<Achievement[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.ACHIEVEMENTS);
-    return saved ? JSON.parse(saved) : [];
+    return storage.getAchievements();
   });
 
   const [celebration, setCelebration] = useState<CelebrationEvent | null>(null);
@@ -137,32 +123,32 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isWeeklyRecapOpen, setIsWeeklyRecapOpen] = useState(false);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(() => {
-    return !localStorage.getItem(STORAGE_KEYS.ONBOARDING_SEEN);
+    return !storage.getOnboardingSeen();
   });
 
-  // Save changes to localStorage
+  // Save changes to storage
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.LANG, lang);
+    storage.setLang(lang);
   }, [lang]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.GOALS, JSON.stringify(goals));
+    storage.setGoals(goals);
   }, [goals]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.TREATS, JSON.stringify(treats));
+    storage.setTreats(treats);
   }, [treats]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.CHECKINS, JSON.stringify(checkIns));
+    storage.setCheckIns(checkIns);
   }, [checkIns]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.REDEMPTIONS, JSON.stringify(redemptions));
+    storage.setRedemptions(redemptions);
   }, [redemptions]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
+    storage.setAchievements(achievements);
   }, [achievements]);
 
   const setLang = (newLang: Language) => {
@@ -587,7 +573,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCheckIns(demo.checkIns);
     setRedemptions(demo.redemptions);
     setAchievements(demo.achievements);
-    localStorage.setItem(STORAGE_KEYS.ONBOARDING_SEEN, 'true');
+    storage.setOnboardingSeen(true);
     setIsOnboardingOpen(false);
   };
 
@@ -597,11 +583,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCheckIns([]);
     setRedemptions([]);
     setAchievements([]);
-    localStorage.removeItem(STORAGE_KEYS.GOALS);
-    localStorage.removeItem(STORAGE_KEYS.TREATS);
-    localStorage.removeItem(STORAGE_KEYS.CHECKINS);
-    localStorage.removeItem(STORAGE_KEYS.REDEMPTIONS);
-    localStorage.removeItem(STORAGE_KEYS.ACHIEVEMENTS);
+    storage.clearAllData();
   };
 
   const exportDataJSON = (): string => {

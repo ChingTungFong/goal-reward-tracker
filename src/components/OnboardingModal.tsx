@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Target, Gift, ShieldAlert, Sparkles, ArrowRight, Check } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { storage } from '../utils/storage';
 
 export const OnboardingModal: React.FC = () => {
   const { isOnboardingOpen, setIsOnboardingOpen, loadDemoData, lang, setLang } = useApp();
@@ -48,7 +49,7 @@ export const OnboardingModal: React.FC = () => {
   const Icon = currentSlide.icon;
 
   const handleFinishFresh = () => {
-    localStorage.setItem('eyt_onboarding_seen', 'true');
+    storage.setOnboardingSeen(true);
     setIsOnboardingOpen(false);
   };
 
