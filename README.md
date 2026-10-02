@@ -66,11 +66,3 @@ This version is intentionally local-only. All storage operations live in a singl
 - **Cloud sync** — replace the storage module with a backend such as Firebase or Supabase to sync across devices.
 - **AI features** — for example, personalised encouragement messages via the Gemini API. API calls should go through a server-side function rather than the browser, so the API key is never exposed to users.
 
-## My role
-
-<!-- TODO: replace the bullets below with your own experience before publishing -->
-
-- [Product definition: the problem you wanted to solve and the requirements you set]
-- [UX/UI decisions you made, and why]
-- [Testing: what you checked, and any issues you found and fixed]
-- [Security and code clean-up: removing unused AI and server dependencies, checking for exposed API keys]
