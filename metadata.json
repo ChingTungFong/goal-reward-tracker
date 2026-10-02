@@ -1,0 +1,6 @@
+{
+  "name": "Earn Your Treat",
+  "description": "A joyful habit and reward tracker where achieving goals earns treats within monthly limits.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
